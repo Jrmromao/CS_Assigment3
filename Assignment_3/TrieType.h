@@ -1,15 +1,16 @@
 #pragma once
 #include "stdafx.h"
 #include "EntryType.h"
+#include <iostream>
 
+using namespace std;
 const int LETTERS = 26;
 typedef char key[MAXLENGTH];
-struct Trienode
+
+struct TrieNode
 {
-
-	Trienode *branch[LETTERS];
+	TrieNode *branch[LETTERS];
 	EntryType *ref;
-
 };
 
 
@@ -18,23 +19,34 @@ class TrieType {
 public:
 	TrieType();
 	~TrieType();
-	TrieType(TrieType &originalTree);
-	void operator=(TrieType &originalTree);
-	void MakeEmpty();
+	//TrieType(TrieType &originalTree);
+	//void operator=(TrieType &originalTree);
+	//void MakeEmpty();
 	void InsertTrie(key newkey, EntryType *newentry);
-	EntryType *  TrieSearch(key target);
-	bool DeleteTrie(key delkey);
-	void PrintTrie() const;
+	EntryType * TrieSearch(key target);
+	//bool DeleteTrie(key delkey);
+	void PrintTrie();
 private:
-	Trienode * root;
+	TrieNode * root;
+	void Print(TrieNode *tree);
 };
 
+
+
+
+TrieType::TrieType()
+{
+	
+}
+TrieType::~TrieType()
+{
+
+}
 
 EntryType * TrieType::TrieSearch(key target) {
 
 
-	Trienode * current = root;
-
+	TrieNode * current = root;
 
 	for (int i = 0; i < MAXLENGTH && current; i++)
 	{
@@ -52,10 +64,14 @@ EntryType * TrieType::TrieSearch(key target) {
 	return current->ref;
 }
 
-Trienode *CreateNode()
+
+
+
+
+TrieNode *CreateNode()
 {
 
-	Trienode *newnode = new Trienode;
+	TrieNode *newnode = new TrieNode;
 	for (int ch = 0; ch < LETTERS; ch++)
 		newnode->branch[ch] = NULL;
 
@@ -65,10 +81,12 @@ Trienode *CreateNode()
 }
 
 
+
 void TrieType::InsertTrie(key newkey, EntryType *newentry)
 {
 
-	Trienode *current;
+	TrieNode *current;
+
 	if (!root)
 		root = CreateNode();
 	current = root;
@@ -83,13 +101,36 @@ void TrieType::InsertTrie(key newkey, EntryType *newentry)
 		}
 
 	if (current->ref != NULL)
-		cout << "\nTried to insert a duplicate key." << endl;
+		cout << "\nTried to insert a duplicate key.\n";
 	else
 		current->ref = newentry;
 
-	if (current->ref != NULL)
-	cout << "\nTried to insert a duplicate key." << endl;
-	else
-	current->ref = newentry;
+
+}
+
+
+
+void TrieType::PrintTrie() {
+
+	Print(root);
+}
+
+
+
+void TrieType::Print(TrieNode *tree)
+{
+	if (tree->ref != NULL)
+	{
+		//cout << *(tree->ref) << " ";
+		
+	}
+
+	for (int i = 0; i < 26; i++)
+	{
+		if (tree->branch[i] != NULL)
+		{
+			Print(tree->branch[i]);
+		}
+	}
 
 }
