@@ -84,12 +84,12 @@ int menu() {
 
 void optionOne_Insert() {
 
-
-
 	cout << "Enter a Word: ";
 	cin >> newKey;
 	EntryType* newEntryType = new EntryType(newKey);
+	
 	newTrie.InsertTrie(newKey, newEntryType);
+
 
 }
 

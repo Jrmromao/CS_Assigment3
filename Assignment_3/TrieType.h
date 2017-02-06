@@ -1,9 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "EntryType.h"
-#include <iostream>
 
-using namespace std;
 const int LETTERS = 26;
 typedef char key[MAXLENGTH];
 
@@ -19,13 +17,14 @@ class TrieType {
 public:
 	TrieType();
 	~TrieType();
-	//TrieType(TrieType &originalTree);
-	//void operator=(TrieType &originalTree);
-	//void MakeEmpty();
+	TrieType(TrieType &originalTree);
+	void operator=(TrieType &originalTree);
+	void MakeEmpty();
 	void InsertTrie(key newkey, EntryType *newentry);
 	EntryType * TrieSearch(key target);
-	//bool DeleteTrie(key delkey);
+	bool DeleteTrie(key delkey);
 	void PrintTrie();
+
 private:
 	TrieNode * root;
 	void Print(TrieNode *tree);
@@ -42,36 +41,37 @@ TrieType::~TrieType()
 {
 
 }
-
+//
+//	search the item in the trie
+//
 EntryType * TrieType::TrieSearch(key target) {
 
 
+	int i;
 	TrieNode * current = root;
-
-	for (int i = 0; i < MAXLENGTH && current; i++)
-	{
+	for (i = 0; i < MAXLENGTH && current; i++)
 		if (target[i] == '\0')
 			break;
-		else 
-			current = current->branch[target[i] - 'a'];
-		if (!current)
-			return NULL;
 		else
-			if (!current->ref)
-				return NULL;
-	}
+			current =
+			current->branch[target[i] - 'a'];
+
+	if (!current)
+		return NULL;
+	else
+		if (!current->ref)
+			return NULL;
 
 	return current->ref;
 }
 
-
-
-
-
+//
+//	create a new node
+//
 TrieNode *CreateNode()
 {
 
-	TrieNode *newnode = new TrieNode;
+	TrieNode *newnode = new (TrieNode);
 	for (int ch = 0; ch < LETTERS; ch++)
 		newnode->branch[ch] = NULL;
 
@@ -90,39 +90,35 @@ void TrieType::InsertTrie(key newkey, EntryType *newentry)
 	if (!root)
 		root = CreateNode();
 	current = root;
-	for (int i = 0; i < MAXLENGTH; i++)
+	for (int i = 0; i < MAXLENGTH; i++) {
 		if (newkey[i] == '\0')
 			break;
 		else
 		{
 			if (!current->branch[newkey[i] - 'a'])
+				
 				current->branch[newkey[i] - 'a'] = CreateNode();
 			current = current->branch[newkey[i] - 'a'];
 		}
+	}
+		if (current->ref != NULL)
+			cout << "\nTried to insert a duplicate key.\n";
+		else
+			current->ref = newentry;
 
-	if (current->ref != NULL)
-		cout << "\nTried to insert a duplicate key.\n";
-	else
-		current->ref = newentry;
+	}
 
-
-}
-
-
-
-void TrieType::PrintTrie() {
+void TrieType::PrintTrie()
+{
 
 	Print(root);
 }
 
-
-
-void TrieType::Print(TrieNode *tree)
+void TrieType::Print(TrieNode * tree)
 {
 	if (tree->ref != NULL)
 	{
-		//cout << *(tree->ref) << " ";
-		
+		cout << *(tree->ref) << " ";
 	}
 
 	for (int i = 0; i < 26; i++)
@@ -134,3 +130,52 @@ void TrieType::Print(TrieNode *tree)
 	}
 
 }
+
+
+
+
+/*
+
+void  TrieType::TrieNode* remove(Trienode *curr, Key key, int depth)
+{
+	if (!curr)
+		return NULL;
+
+	if (depth == strlen(key))
+	{
+		if (haveChildren(curr) == false)
+		{
+			free(curr);
+			curr = NULL;
+		}
+
+		return curr;
+	}
+
+	int index = key[depth] - 'a';
+	curr->branch[index] = remove(curr->branch[index], key, depth + 1);
+
+	if (haveChildren(curr) == false)
+	{
+		free(curr);
+		curr = NULL;
+	}
+
+	return curr;
+}
+
+
+*/
+/*
+bool TrieType::DeleteTrie(Key delkey)
+{
+	if (TrieSearch(delkey) == false)
+		return false;
+	else
+	{
+		remove(root, delkey, 0);
+
+		return true;
+	}
+
+*/
