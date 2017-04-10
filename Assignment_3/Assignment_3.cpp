@@ -1,6 +1,6 @@
 //////////////////////////////////
-//	Author: Joao Filipe Romao	//
-//	K00201566					//
+// Author: Joao Filipe Romao	//
+// K00201566			//
 //////////////////////////////////
 #include "stdafx.h"
 #include "TrieType.h"
